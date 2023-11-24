@@ -4,7 +4,7 @@ const cities = require('./cities')
 const {places, descriptors} = require('./seedHelpers')
 const Campground = require('../models/campground');
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+mongoose.connect('mongodb+srv://haiyan:TDfaBFNXRh4TqOvs@sparkcodeacademy.xxtvoj7.mongodb.net/yelp-camp-haiyan?retryWrites=true&w=majority');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
