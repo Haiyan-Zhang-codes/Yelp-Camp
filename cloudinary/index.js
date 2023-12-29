@@ -11,8 +11,11 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
-    folder: 'Haiyan_YelpCamp',
-    allowedFormats: ['jpeg', 'png', 'jpg']
+    params: {
+        folder: 'Haiyan_YelpCamp',
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
+    
 })
 
 module.exports = {
