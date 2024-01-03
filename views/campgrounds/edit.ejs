@@ -13,22 +13,21 @@
                         Looks good!
                     </div>
                 </div>    
-                <div class="mb-3"
+                <div class="mb-3">
                     <label class="form-label"  for="title">Location</label>
                     <input class="form-control" type="text" id="location" name="campground[location]" value="<%= campground.location %>" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="mb-3"
+                <div class="mb-3">
                     <label class="form-label"  for="image">Add Images</label>
-                    <input type="file" name="image" id="" multiple>
-                    <!-- <input class="form-control" type="text" id="image" name="campground[image]" value="<%= campground.image %>" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div> -->
+                    <div class="mb-3 custom-file">
+                
+                        <input class="form-control" name="image" type="file"  multiple>
+                    </div>                   
                 </div>
-                <div class="mb-3"
+                <div class="mb-3">
                     <label class="form-label"  for="description">Description</label>
                     <textarea class="form-control" type="text" id="description" name="campground[description]" required ><%= campground.description %></textarea>
                     <div class="valid-feedback">
@@ -45,6 +44,15 @@
                         </div>
                         <span class="input-group-text">.00</span>
                     </div>
+                </div>
+                <div class="mb-3">
+                    <% campground.images.forEach(function (image,i) { %>
+                        <img src="<%= image.thumbnail %>" alt="image" class="img-thumbnail">
+                        <div class="form-check-inline">
+                            <input type="checkbox" name="deleteImages[]" id="img-<%= i %>" value="<%= image.filename %>">
+                        </div>
+                        <label for="img-<%= i %>">Delete?</label>
+                    <%}) %>
                 </div>
                 <button class="btn btn-success mb-3">Update Campground</button>
             </form>
