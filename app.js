@@ -8,6 +8,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
@@ -20,9 +21,10 @@ const User = require('./models/user')
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
+const dbUrl = process.env.DB_URL
 
-
-mongoose.connect('mongodb+srv://haiyan:TDfaBFNXRh4TqOvs@sparkcodeacademy.xxtvoj7.mongodb.net/yelp-camp-haiyan?retryWrites=true&w=majority');
+// TODO: mongo atlas url of sparkcodeacademy:'mongodb+srv://haiyan:TDfaBFNXRh4TqOvs@sparkcodeacademy.xxtvoj7.mongodb.net/yelp-camp-haiyan?retryWrites=true&w=majority'
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -33,11 +35,16 @@ db.once('open', ()=>{
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname, 'views'));
+
+// TODO: "body parser"
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname,'public')))
 app.use(mongoSanitize());
 app.use(helmet());
+
+
+
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
@@ -89,7 +96,20 @@ app.use(
     })
 );
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
+
+store.on('error', function(e){
+    console.log('SESSION STORE ERROR', e)
+})
+
 const sessionConfig = {
+    store,
     name: 'Hi',
     secret: 'thisshouldbeabettersecret!',
     resave: false,
